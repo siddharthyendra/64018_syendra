@@ -1,0 +1,71 @@
+---
+title: "QMM Goal programming assignment"
+author: "S . Siddharth Yendra"
+date: "2023-11-26"
+output: html_document
+---
+
+SUMMARY:
+
+The findings presented underscore the identification of an optimal solution for the goal programming problem. By examining decision variable values, this analysis provides insights into recommended production levels and deviations from the targets for each factor, while accommodating imposed constraints and penalties. This method effectively handles target deviations by incorporating penalties to maximize profit. The determined optimal solution for the linear programming problem is 225, signifying the attainment of the best possible outcome based on the goal function within the given conditions.
+
+The presence of slack variables aids in discerning whether constraints are precisely met or if there is a surplus. Simultaneously, the decision variables divulge the optimal choices in various scenarios.
+
+Consider the products as x_1 (Product 1), x_2 (Product 2), and x_3 (Product 3), along with constraints related to employment levels and earnings for the next year. The employment constraint is expressed as 6x_1 + 4x_2 + 5x_3 = 50, while the earnings next year constraint is articulated as 8x_1 + 7x_2 + 5x_3 ≥ 75. The objective is to express the total discounted profit over the products' lifespan (P=20x_1+15x_2+25x_3), and the goal is to maximize MaxZ, where MaxZ = P - 6(y_1^- + y_1^+) + 0(y_2^-) - 3(y_2^+).
+
+In this context, P represents the total discounted profit, C represents the change in current employment level, and D represents the decrease in earnings for the following year compared to the current year. The management's objective function is formulated in terms of x_1, x_2, x_3, y_1^+, y_1^-, y_2^+, and y_2^-, with the aim of maximizing MaxZ
+
+
+***
+***
+Problem:
+The Research and Development Division of the Emax Corporation has developed three new products. A decision now needs to be made on which mix of these products should be produced. Management wants primary consideration given to three factors: total profit, stability in the workforce, and achieving an increase in the company’s earnings next year from the $75 million
+achieved this year. In particular, using the units given in the following table, they want to Maximize Z = P - 6C - 3D, where
+
+P = total (discounted) profit over the life of the new products,
+C = change (in either direction) in the current level of employment,
+D = decrease (if any) in next year’s earnings from the current year’s level.
+The amount of any increase in earnings does not enter into Z, because management is concerned
+primarily with just achieving some increase to keep the stockholders happy. (It has mixed
+feelings about a large increase that then would be difficult to surpass in subsequent years.)
+
+1.Define y1+ and y1-, respectively, as the amount over (if any) and the amount under (if any)
+the employment level goal. Define y2+ and y2- in the same way for the goal regarding
+earnings next year. Define x1, x2, and x3 as the production rates of Products 1, 2, and 3,
+respectively. With these definitions, use the goal programming technique to express y1+,
+y1- , y2+ and y2- algebraically in terms of x1, x2, and x3. Also express P in terms of x1, x2,
+and x3.
+
+2.Express management’s objective function in terms of x1, x2, x3, y1+, y1- , y2+ and y2-.
+
+3.Formulate and solve the linear programming model. What are your findings?
+***
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(lpSolve)
+library(lpSolveAPI)
+e1 <- read.lp("C:\\Users\\91916\\Downloads\\goal.lp")
+print(e1)
+```
+
+```{r}
+e2 <- matrix(c("Total Profit", "Employment Level", "Earnings Next Year",
+                       20,6,8,
+                       15,4,7,
+                       25,5,5,
+                       "Maximize","=50",">=75",
+                       "Millions of Dollars", "Hundreds of Employees", "Millions of Dollars"), ncol=6, byrow = F)
+colnames(e2) <- c("Factor","Product 1", "Product 2", "Product 3", "Goal", "Units")
+as.table(e2)
+``` 
+
+```{r}
+solve(e1)
+get.objective(e1)
+get.variables(e1) 
+
+```
